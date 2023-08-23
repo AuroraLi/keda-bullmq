@@ -1,0 +1,43 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: redis-scaledobject
+  namespace: default
+  labels:
+    deploymentName: helloweb
+spec:
+  maxReplicaCount: 4
+  pollingInterval: 3  # Optional. Default: 30 seconds
+  cooldownPeriod:  5 # Optional. Default: 300 seconds
+  scaleTargetRef:
+    name: helloweb
+  triggers:
+    - type: redis
+      metadata:
+        address: REDIS_IP:6379
+        listName: default
+        listLength: "10"
+      # authenticationRef:
+      #   name: keda-trigger-auth-redis-secret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+data:
+  redis_username: YWRtaW4=
+  redis_password: YWRtaW4=
+---
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: keda-trigger-auth-redis-secret
+spec:
+  secretTargetRef:
+  - parameter: username
+    name: db-secret
+    key: redis_username
+  - parameter: password
+    name: db-secret
+    key: redis_password
