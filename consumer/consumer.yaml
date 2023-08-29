@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: consumer
+spec:
+  ports:
+  - port: 8080
+  type: ClusterIP
+  selector:
+    app: consumer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer
+spec:
+  selector:
+    matchLabels:
+      app: consumer
+  template:
+    metadata:
+      labels:
+        app: consumer
+    spec:
+      containers:
+      - name: consumer
+        image: bullmq-consumer
+        ports:
+        - containerPort: 8080
+        env:
+        - name: REDIS_QUEUE_HOST
+          value: REDIS_IP
+        - name: REDIS_QUEUE_PORT
+          value: "6379"
+        - name: PORT
+          value: "8080"

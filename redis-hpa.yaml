@@ -4,19 +4,19 @@ metadata:
   name: redis-scaledobject
   namespace: default
   labels:
-    deploymentName: helloweb
+    deploymentName: consumer
 spec:
   maxReplicaCount: 4
-  pollingInterval: 3  # Optional. Default: 30 seconds
-  cooldownPeriod:  5 # Optional. Default: 300 seconds
+  pollingInterval: 1  # Optional. Default: 30 seconds
+  cooldownPeriod:  2 # Optional. Default: 300 seconds
   scaleTargetRef:
-    name: helloweb
+    name: consumer
   triggers:
     - type: redis
       metadata:
         address: REDIS_IP:6379
-        listName: default
-        listLength: "10"
+        listName: "bull:dataSchedule:wait" # "bull:dataSchedule:delayed"
+        listLength: "1"
       # authenticationRef:
       #   name: keda-trigger-auth-redis-secret
 ---

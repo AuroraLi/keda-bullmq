@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node
+spec:
+  ports:
+  - port: 8080
+  type: LoadBalancer
+  selector:
+    app: node
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node
+spec:
+  selector:
+    matchLabels:
+      app: node
+  template:
+    metadata:
+      labels:
+        app: node
+    spec:
+      containers:
+      - name: node
+        image: bullmq-producer
+        ports:
+        - containerPort: 8080
+        env:
+        - name: REDIS_QUEUE_HOST
+          value: REDIS_IP
+        - name: REDIS_QUEUE_PORT
+          value: "6379"
+        - name: PORT
+          value: "8080"

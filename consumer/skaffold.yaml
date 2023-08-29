@@ -1,0 +1,16 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: consumer
+build:
+  artifacts:
+    - image: bullmq-consumer
+      docker:
+        dockerfile: Dockerfile
+  googleCloudBuild:
+    projectId: autopilot-396218
+manifests:
+  rawYaml:
+    - consumer.yaml
+deploy:
+  kubectl: {}

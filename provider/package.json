@@ -1,0 +1,15 @@
+{
+    "name": "web_app",
+    "version": "1.0.0",
+    "description": "Node.js on Docker",
+    "main": "server.js",
+    "type": "module",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "bullmq": "^4.8.0",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2"
+    }
+}
